@@ -43,3 +43,21 @@ $ for i in traliva_1 traliva_2 traliva_3;do sudo logwrap $i; done
 ```bash
 $ mv logwrap_traliva traliva
 ```
+
+# Особый случай - логирование утилит из /snap/... (Ubuntu)
+
+Раздел ```/snap/...``` монтируется только для чтения, так что сходу добавить логирование к тем бинарникам нам не получится.
+Команда ```mount``` нам даёт:
+```
+...
+/var/lib/snapd/snaps/android-studio_113.snap on /snap/android-studio/113 type squashfs (ro,nodev,relatime,x-gdu.hide)
+/var/lib/snapd/snaps/android-studio_114.snap on /snap/android-studio/114 type squashfs (ro,nodev,relatime,x-gdu.hide)
+...
+```
+Меня интересует раздел конкретно 114-й.
+
+Поэтому, перед тем как запускать утилиту ```logwrap```, необходимо перемонтировать раздел с правами записи:
+
+```bash
+sudo umount /snap/android-studio/114
+```
