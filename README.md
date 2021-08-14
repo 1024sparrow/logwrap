@@ -59,5 +59,15 @@ $ mv logwrap_traliva traliva
 Поэтому, перед тем как запускать утилиту ```logwrap```, необходимо перемонтировать раздел с правами записи:
 
 ```bash
-sudo umount /snap/android-studio/114
+$ sudo umount /snap/android-studio/114
+$ sudo unsquashfs /var/lib/snapd/snaps/android-studio_114.snap
+... в текущей директории появляется директория "squashfs-root"
+$ cd squashfs-root/
+
+... а теперь как в случае с android-studio, как у нас было
+$ cd android-studio/jre/bin/
+$ for i in $(ls);do sudo logwrap $i;done
+$ sudo mksquashfs squashfs-root android-studio_114
+$ sudo cp android-studio_114 /var/lib/snapd/snaps/android-studio_114
+$ sudo mount -t squashfs -o ro,nodev,relatime,x-gdu.hide /var/lib/snapd/snaps/android-studio_114 /snap/android-studio/114
 ```
